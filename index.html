@@ -253,69 +253,107 @@
             border: 1px solid var(--gold-medium);
         }
         
-        /* Форма */
-        form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-top: 2rem;
-        }
-        
-        .form-group {
-            margin-bottom: 1rem;
-            position: relative;
-        }
-        
-        .form-group.full-width {
-            grid-column: span 2;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--text-dark);
-            font-weight: 500;
-        }
-        
-        input, textarea {
-            width: 100%;
-            padding: 1rem;
-            border: 1px solid var(--gold-medium);
-            border-radius: 4px;
-            font-family: inherit;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background-color: rgba(244, 226, 156, 0.2);
-        }
-        
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--green-dark);
-            box-shadow: 0 0 0 2px rgba(92, 99, 52, 0.2);
-        }
-        
-        button {
-            grid-column: span 2;
-            background: linear-gradient(to right, var(--gold-dark), var(--brown-dark));
-            color: white;
-            border: none;
-            padding: 1.2rem;
-            border-radius: 4px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-family: 'Cormorant SC', serif;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(92, 99, 52, 0.3);
-        }
-        
+/* Стили для формы */
+form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--green-dark);
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid var(--gold-medium);
+    border-radius: 4px;
+    background-color: rgba(244, 226, 156, 0.1);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--gold-dark);
+    box-shadow: 0 0 0 3px rgba(167, 114, 39, 0.2);
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* Стили для кнопки */
+button {
+    grid-column: span 2;
+    background-color: var(--green-dark);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
+    margin-top: 1rem;
+}
+
+button:hover {
+    background-color: var(--brown-dark);
+    transform: translateY(-2px);
+}
+
+/* Стили для полей с детьми */
+.children-fields {
+    grid-column: span 2;
+    background: rgba(244, 226, 156, 0.1);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+    border-left: 3px solid var(--gold-dark);
+}
+
+.child-info {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px dashed var(--gold-medium);
+}
+
+.child-info:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* Адаптивность формы */
+@media (max-width: 768px) {
+    form {
+        grid-template-columns: 1fr;
+    }
+    
+    button {
+        grid-column: span 1;
+    }
+    
+    .form-group.full-width {
+        grid-column: span 1;
+    }
+}
         /* Цветовая палитра для дресс-кода */
         .color-palette {
             display: flex;
@@ -747,7 +785,7 @@
                 <input type="hidden" name="_next" value="#thanks">
                 <input type="hidden" name="_captcha" value="false">
                 
-                <div class="form-group full-width">
+                <div class="form-group">
                     <label for="names">Ваши имена (через запятую) *</label>
                     <input type="text" id="names" name="Имена гостей" required placeholder="Например: Анна Иванова, Михаил Петров">
                 </div>
@@ -757,13 +795,7 @@
                     <input type="tel" id="phone" name="Телефон" required placeholder="+7 (XXX) XXX-XX-XX">
                 </div>
                 
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="Email" placeholder="Ваш email (необязательно)">
-                </div>
-                
-                <!-- Оптимизированный чекбокс -->
-                <div class="checkbox-container">
+                <div class="form-group checkbox-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="withChildren" name="С детьми" onchange="toggleChildrenFields()">
                         <span>Будут ли с вами дети?</span>
@@ -771,21 +803,21 @@
                 </div>
                 
                 <!-- Блок с детьми (изначально скрыт) -->
-                <div id="childrenFields" style="display: none; width: 100%; grid-column: span 2; margin: 1rem 0;">
-                    <div class="form-group" style="grid-column: span 2;">
+                <div id="childrenFields" class="children-fields" style="display: none;">
+                    <div class="form-group">
                         <label for="childrenCount">Количество детей</label>
                         <input type="number" id="childrenCount" name="Количество детей" min="0" value="0" onchange="updateChildrenInfoFields()">
                     </div>
                     
-                    <div id="childrenInfoContainer" style="grid-column: span 2;"></div>
+                    <div id="childrenInfoContainer"></div>
                 </div>
                 
-                <div class="form-group full-width">
+                <div class="form-group">
                     <label for="allergies">Аллергии/Особые пожелания</label>
                     <textarea id="allergies" name="Аллергии и пожелания" rows="2" placeholder="Например: аллергия на морепродукты, вегетарианское меню"></textarea>
                 </div>
                 
-                <div class="form-group full-width">
+                <div class="form-group">
                     <label for="message">Предпочтения по алкоголю</label>
                     <textarea id="message" name="Пожелания" rows="3" placeholder="Что будете пить из веселительных напитков :)"></textarea>
                 </div>
@@ -884,23 +916,18 @@
             
             for (let i = 1; i <= count; i++) {
                 const fieldset = document.createElement('div');
-                fieldset.style.marginBottom = '1rem';
-                fieldset.style.padding = '1rem';
-                fieldset.style.border = '1px dashed #d0ab59';
-                fieldset.style.borderRadius = '4px';
+                fieldset.className = 'child-info';
                 fieldset.innerHTML = `
                     <h4 style="margin: 0 0 0.5rem 0; color: #5c6334;">Ребенок ${i}</h4>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div>
-                            <label for="childName${i}">Имя</label>
-                            <input type="text" id="childName${i}" name="Имя ребенка ${i}" required placeholder="Имя">
-                        </div>
-                        <div>
-                            <label for="childAge${i}">Возраст</label>
-                            <input type="number" id="childAge${i}" name="Возраст ребенка ${i}" min="0" max="18" required placeholder="Возраст">
-                        </div>
+                    <div class="form-group">
+                        <label for="childName${i}">Имя</label>
+                        <input type="text" id="childName${i}" name="Имя ребенка ${i}" required placeholder="Имя">
                     </div>
-                    <div style="margin-top: 0.5rem;">
+                    <div class="form-group">
+                        <label for="childAge${i}">Возраст</label>
+                        <input type="number" id="childAge${i}" name="Возраст ребенка ${i}" min="0" max="18" required placeholder="Возраст">
+                    </div>
+                    <div class="form-group">
                         <label for="childNotes${i}">Особые пожелания</label>
                         <input type="text" id="childNotes${i}" name="Пожелания для ребенка ${i}" placeholder="Аллергии, особенности питания">
                     </div>
